@@ -3,7 +3,6 @@ import { instance } from "@/apis";
 import toast from "react-hot-toast";
 import { OrderRequest } from "./type";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { AxiosError } from "axios";
 
 const router = "/order";
 
