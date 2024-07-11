@@ -93,7 +93,7 @@ export const Cart = () => {
               booth_id: +searchParams.get("id")!,
               request: requestMessage,
               price: JSON.parse(localStorage.getItem("select") || "[]").reduce(
-                (acc: number, a: Storage) => acc + a.price,
+                (acc: number, a: Storage) => acc + a.price * a.amount,
                 0
               ),
             });
