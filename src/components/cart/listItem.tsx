@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { Button, NumberButton, Stack } from "@/components";
 import { SetStateAction, useState } from "react";
+import { useBoothMenu } from "@/apis/menu";
+import { useSearchParams } from "react-router-dom";
 
 interface OrderListItemProps {
   name: string;
@@ -13,7 +15,9 @@ interface OrderListItemProps {
 }
 
 export const SelectListItem = ({ name, coin, img, amount, id, setCount, setTotal }: OrderListItemProps) => {
+  const [searchParams] = useSearchParams();
   const [quantity, setQuantity] = useState(amount);
+  const { data: boothMenu } = useBoothMenu(+searchParams.get("id")!);
 
   return (
     <Item>
@@ -34,7 +38,11 @@ export const SelectListItem = ({ name, coin, img, amount, id, setCount, setTotal
                   JSON.parse(localStorage.getItem("select") || "[]").filter((res: Storage) => res.id !== id)
                 )
               );
-              setCount(JSON.parse(localStorage.getItem("select") || "[]").length);
+              setCount(
+                boothMenu?.data.menu.filter((res: Storage) =>
+                  JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+                ).length || 0
+              );
             }}
           >
             삭제

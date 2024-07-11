@@ -4,7 +4,7 @@ import { Arrow, Coin } from "@/assets/images";
 import { Link, useSearchParams } from "react-router-dom";
 import { useBoothMenu } from "@/apis/menu";
 import { useMyCoin } from "@/apis";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useOrder } from "@/apis/order";
 
 export const Cart = () => {
@@ -17,8 +17,10 @@ export const Cart = () => {
 
   // JSON.parse(localStorage.getItem("select") || "[]").filter((res) => boothMenu.data.menu.);
   const selectedBooth = boothMenu?.data.menu
-    .filter(res => JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id))
-    .map(res => {
+    .filter((res: Storage) =>
+      JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+    )
+    .map((res: Storage) => {
       return {
         ...res,
         amount: JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
@@ -27,8 +29,42 @@ export const Cart = () => {
     });
 
   const [total, setTotal] = useState(
-    JSON.parse(localStorage.getItem("select") || "[]").reduce((acc: number, a: Storage) => acc + a.price * a.amount, 0)
+    boothMenu?.data.menu
+      .filter((res: Storage) =>
+        JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+      )
+      .map((res: Storage) => {
+        return {
+          ...res,
+          amount: JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+            .amount,
+        };
+      })
+      .reduce((acc: number, a: Storage) => acc + a.price * a.amount, 0)
   );
+
+  useEffect(() => {
+    setTotal(
+      boothMenu?.data.menu
+        .filter((res: Storage) =>
+          JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+        )
+        .map((res: Storage) => {
+          return {
+            ...res,
+            amount: JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+              .amount,
+          };
+        })
+        .reduce((acc: number, a: Storage) => acc + a.price * a.amount, 0)
+    );
+
+    setCount(
+      boothMenu?.data.menu.filter((res: Storage) =>
+        JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+      ).length
+    );
+  }, [boothMenu]);
 
   return (
     <Container>
@@ -51,7 +87,7 @@ export const Cart = () => {
         </Stack>
       </Header>
       <Stack width="100vw" direction="column" align="center" padding={14} gap={14}>
-        {selectedBooth?.map(res => {
+        {selectedBooth?.map((res: Storage) => {
           const { id, name, image_url, price, amount } = res;
           return (
             <SelectListItem
@@ -92,10 +128,19 @@ export const Cart = () => {
               }),
               booth_id: +searchParams.get("id")!,
               request: requestMessage,
-              price: JSON.parse(localStorage.getItem("select") || "[]").reduce(
-                (acc: number, a: Storage) => acc + a.price * a.amount,
-                0
-              ),
+              price: boothMenu?.data.menu
+                .filter((res: Storage) =>
+                  JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+                )
+                .map((res: Storage) => {
+                  return {
+                    ...res,
+                    amount: JSON.parse(localStorage.getItem("select") || "[]").find(
+                      (select: Storage) => res.id === select.id
+                    ).amount,
+                  };
+                })
+                .reduce((acc: number, a: Storage) => acc + a.price * a.amount, 0),
             });
           }}
         >

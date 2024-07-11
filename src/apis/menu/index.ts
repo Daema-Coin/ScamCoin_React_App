@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { instance } from "@/apis";
-import { BoothMenuResponse } from "./type";
+// import { BoothMenuResponse } from "./type";
 
 const router = "/menu";
 
@@ -8,6 +8,6 @@ const router = "/menu";
 export const useBoothMenu = (boothId: number) => {
   return useQuery({
     queryKey: ["boothMenu", boothId],
-    queryFn: async () => await instance.get<BoothMenuResponse>(`${router}/${boothId}`),
+    queryFn: async () => await instance.get<any>(`${router}/${boothId}`),
   });
 };

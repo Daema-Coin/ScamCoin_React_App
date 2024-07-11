@@ -2,6 +2,8 @@ import { Minus, Plus } from "@/assets/images";
 import styled, { css } from "styled-components";
 import { Text } from "@/components";
 import { SetStateAction } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useBoothMenu } from "@/apis/menu";
 
 type PropsType = {
   id: number;
@@ -11,6 +13,9 @@ type PropsType = {
 };
 
 export const NumberButton = ({ value, setQuantity, id, setTotal }: PropsType) => {
+  const [searchParams] = useSearchParams();
+  const { data: boothMenu } = useBoothMenu(+searchParams.get("id")!);
+
   return (
     <Container>
       <Img
@@ -27,10 +32,19 @@ export const NumberButton = ({ value, setQuantity, id, setTotal }: PropsType) =>
           );
           setQuantity(value <= 1 ? 1 : value - 1);
           setTotal(
-            JSON.parse(localStorage.getItem("select") || "[]").reduce(
-              (acc: number, a: Storage) => acc + a.price * a.amount,
-              0
-            )
+            boothMenu?.data.menu
+              .filter((res: Storage) =>
+                JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+              )
+              .map((res: Storage) => {
+                return {
+                  ...res,
+                  amount: JSON.parse(localStorage.getItem("select") || "[]").find(
+                    (select: Storage) => res.id === select.id
+                  ).amount,
+                };
+              })
+              .reduce((acc: number, a: Storage) => acc + a.price * a.amount, 0)
           );
         }}
         width={12}
@@ -54,10 +68,19 @@ export const NumberButton = ({ value, setQuantity, id, setTotal }: PropsType) =>
           );
           setQuantity(value + 1);
           setTotal(
-            JSON.parse(localStorage.getItem("select") || "[]").reduce(
-              (acc: number, a: Storage) => acc + a.price * a.amount,
-              0
-            )
+            boothMenu?.data.menu
+              .filter((res: Storage) =>
+                JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+              )
+              .map((res: Storage) => {
+                return {
+                  ...res,
+                  amount: JSON.parse(localStorage.getItem("select") || "[]").find(
+                    (select: Storage) => res.id === select.id
+                  ).amount,
+                };
+              })
+              .reduce((acc: number, a: Storage) => acc + a.price * a.amount, 0)
           );
         }}
         width={12}

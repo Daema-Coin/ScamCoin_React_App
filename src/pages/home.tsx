@@ -13,7 +13,7 @@ export const Home = () => {
   const [search, setSearch] = useState("");
   const [count, setCount] = useState(JSON.parse(localStorage.getItem("select") || "[]").length);
 
-  const selectedBooth = boothMenu?.data.menu.filter(res =>
+  const selectedBooth = boothMenu?.data.menu.filter((res: Storage) =>
     JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
   );
 
@@ -28,7 +28,7 @@ export const Home = () => {
               {myCoin?.data.coin}
             </Text>
           </CoinWrapper>
-          <Link to="/cart">
+          <Link to={`/cart?id=${searchParams.get("id")}`}>
             <CartImage src={Cart} alt="cart" />
           </Link>
         </Stack>
@@ -46,8 +46,8 @@ export const Home = () => {
         <Divider />
         <ItemList>
           {boothMenu?.data.menu
-            .filter(res => res.name.includes(search))
-            .map(res => {
+            .filter((res: Storage) => res.name.includes(search))
+            .map((res: Storage) => {
               const { id, name, description, price, image_url, is_open } = res;
               return (
                 <OrderListItem
@@ -70,10 +70,11 @@ export const Home = () => {
             <Link to={`/cart?id=${searchParams.get("id")}`}>
               <Button width="100%" height={44}>
                 <Text size={14} weight={600} color="#fff">
-                  {JSON.parse(localStorage.getItem("select") || "[]").reduce(
-                    (acc: number, a: Storage) => acc + a.price,
-                    0
-                  )}
+                  {boothMenu?.data.menu
+                    .filter((res: Storage) =>
+                      JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+                    )
+                    .reduce((acc: number, a: Storage) => acc + a.price, 0)}
                   코인 · 주문하기
                 </Text>
                 <NumCheck>{selectedBooth?.length}</NumCheck>
