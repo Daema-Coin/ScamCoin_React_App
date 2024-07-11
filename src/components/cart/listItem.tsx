@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { Button, NumberButton, Stack } from "@/components";
 
@@ -9,10 +8,8 @@ interface OrderListItemProps {
 }
 
 export const SelectListItem = ({ name, coin, img }: OrderListItemProps) => {
-  const [isSelected, setIsSelected] = useState(false);
-
   return (
-    <Item $isSelected={isSelected} onClick={() => setIsSelected(prev => !prev)}>
+    <Item>
       <ImgWrapper>
         <img src={import.meta.env.VITE_FILE_URL + img} alt="" width={80} height={80} />
       </ImgWrapper>
@@ -30,7 +27,7 @@ export const SelectListItem = ({ name, coin, img }: OrderListItemProps) => {
   );
 };
 
-const Item = styled.div<{ $isSelected: boolean }>`
+const Item = styled.div`
   display: flex;
   align-items: center;
   gap: 40px;
@@ -38,7 +35,7 @@ const Item = styled.div<{ $isSelected: boolean }>`
   width: 100%;
   padding: 20px;
   border-radius: 8px;
-  border: ${({ $isSelected }) => ($isSelected ? "2px solid #4285f4" : "1px solid #cccccc")};
+  border: 1px solid #cccccc;
   cursor: pointer;
   transition: border-color 0.3s;
 `;

@@ -75,7 +75,7 @@ const Item = styled.div<{ isSelected: boolean }>`
   background-color: #fff;
   padding: 15px;
   border-radius: 8px;
-  border: ${props => (props.isSelected ? "2px solid #4285f4" : "1px solid #cccccc")};
+  border: ${props => (props.isSelected ? "1px solid #4285f4" : "1px solid #cccccc")};
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: border-color 0.3s;
