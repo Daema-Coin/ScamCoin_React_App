@@ -1,0 +1,1 @@
+# ScamCoin_React_App
