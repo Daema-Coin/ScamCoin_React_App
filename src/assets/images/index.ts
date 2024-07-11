@@ -5,6 +5,8 @@ export { default as Minus } from "./minus.svg";
 export { default as Cart } from "./cart.svg";
 export { default as CheckImg } from "./checkImg.svg";
 export { default as Coin } from "./coin.svg";
+export { default as Arrow } from "./arrow.svg";
 
 export { default as DSM } from "./dsm.png";
 export { default as DSMLogo } from "./dsmLogo.png";
+export { default as Pay } from "./pay.png";
