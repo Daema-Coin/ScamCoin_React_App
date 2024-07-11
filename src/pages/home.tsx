@@ -1,31 +1,29 @@
-import { SearchInput, Stack } from "@/components";
+import { OrderListItem, SearchInput, Stack, Text } from "@/components";
 import styled from "styled-components";
-import logoImage from "@/assets/images/dsmLogo.png";
-import coinImage from "@/assets/images/coin.svg";
-import cartImage from "@/assets/images/cart.svg";
-import dsmImage from "@/assets/images/dsm.png";
-import { OrderListItem } from "@/components/listItem";
 import { useState } from "react";
+import { Cart, Coin, DSM, DSMLogo } from "@/assets/images";
 
-const Home = () => {
+export const Home = () => {
   const [selected, setSelected] = useState([]);
 
   return (
     <Container>
       <Header>
-        <Logo src={logoImage} alt="logo" />
+        <Logo src={DSMLogo} alt="logo" />
         <Stack gap={20} align="center">
           <CoinWrapper>
-            <CoinImage src={coinImage} alt="coin" />
-            <span>100</span>
+            <img src={Coin} alt="coin" width={14} />
+            <Text size={12} weight={600} color="#3D8AFF" style={{ marginBottom: "-2px" }}>
+              100
+            </Text>
           </CoinWrapper>
-          <CartImage src={cartImage} alt="cart" />
+          <CartImage src={Cart} alt="cart" />
         </Stack>
       </Header>
       <main>
         <FixedContent>
           <BoothInfo>
-            <BoothIcon src={dsmImage} alt="dsm" />
+            <BoothIcon src={DSM} alt="dsm" />
             <BoothName>부스이름</BoothName>
           </BoothInfo>
           <SearchBar>
@@ -34,7 +32,7 @@ const Home = () => {
         </FixedContent>
         <Divider />
         <ItemList>
-          <OrderListItem name="fdafds" coin={10} description="설명" img=".png" />
+          <OrderListItem name="동전 1개" coin={10} description="설명" img=".png" />
           <OrderListItem name="fdafds" coin={10} description="설명" img=".png" />
           <OrderListItem name="fdafds" coin={10} description="설명" img=".png" />
           <OrderListItem name="fdafds" coin={10} description="설명" img=".png" />
@@ -50,8 +48,6 @@ const Home = () => {
     </Container>
   );
 };
-
-export default Home;
 
 const Container = styled.div`
   display: flex;
@@ -76,17 +72,13 @@ const CoinWrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #fff;
-  border: 3px solid #3d8aff;
+  border: 1px solid #3d8aff;
   color: #3d8aff;
-  border-radius: 8px;
-  padding: 5px 10px;
-  font-weight: 700;
-`;
-
-const CoinImage = styled.img`
-  width: 24px;
   height: 24px;
-  margin-right: 5px;
+  border-radius: 4px;
+  padding: 0px 6px;
+  font-weight: 700;
+  gap: 12px;
 `;
 
 const CartImage = styled.img`
@@ -108,8 +100,8 @@ const BoothInfo = styled.div`
 `;
 
 const BoothIcon = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   margin-bottom: 10px;
 `;
@@ -122,20 +114,19 @@ const BoothName = styled.div`
 const SearchBar = styled.div`
   display: flex;
   justify-content: center;
-  padding: 13px;
+  padding: 12px;
 `;
 
 const Divider = styled.div`
   height: 1px;
   background-color: #ccc;
-  margin: 10px 0;
 `;
 
 const ItemList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 13px;
-  padding: 20px;
+  gap: 12px;
+  padding: 12px;
   overflow-y: auto;
 `;
 

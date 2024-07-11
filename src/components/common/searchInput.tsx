@@ -33,14 +33,15 @@ const StyledInputWrapper = styled.label<{ $width?: CSSProperties["width"] }>`
 
 const StyledInput = styled.input<{ $isSearch: boolean }>`
   width: 100%;
-  height: 48px;
+  height: 40px;
   padding: 8px 16px 8px 48px;
-  border: 1px solid #cacaca;
-  border-radius: 8px;
+  border: none;
+  border-radius: 12px;
+  background-color: #f7f7f7;
 
   outline: none;
 
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
 
   ::placeholder {
