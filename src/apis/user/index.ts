@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
-import { type SignInRequest } from "@/apis";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { instance, type SignInRequest } from "@/apis";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,5 +21,13 @@ export const useSignIn = (data: SignInRequest) => {
     onError: () => {
       toast.error("로그인에 실패했어요.");
     },
+  });
+};
+
+// 내 코인 잔액 조회
+export const useMyCoin = () => {
+  return useQuery({
+    queryKey: ["myCoin"],
+    queryFn: async () => await instance.get<{ coin: number }>(`${router}/coin`),
   });
 };
