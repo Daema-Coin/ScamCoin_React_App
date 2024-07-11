@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Arrow, Coin } from "@/assets/images";
 import { Link, useSearchParams } from "react-router-dom";
 import { useBoothMenu } from "@/apis/menu";
-import { useEffect } from "react";
 
 export const Cart = () => {
   const [searchParams] = useSearchParams();
