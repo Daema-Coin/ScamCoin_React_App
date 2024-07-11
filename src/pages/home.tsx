@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Cart, Coin, DSM, DSMLogo } from "@/assets/images";
 import { useBoothMenu } from "@/apis/menu";
 import { useMyCoin } from "@/apis";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   const { data: boothMenu } = useBoothMenu(4);
@@ -22,7 +23,9 @@ export const Home = () => {
               {myCoin?.data.coin}
             </Text>
           </CoinWrapper>
-          <CartImage src={Cart} alt="cart" />
+          <Link to="/cart">
+            <CartImage src={Cart} alt="cart" />
+          </Link>
         </Stack>
       </Header>
       <main>
@@ -59,9 +62,12 @@ export const Home = () => {
       {count > 0 && (
         <OrderFooter>
           <OrderBackground>
-            <OrderButton>
-              {JSON.parse(localStorage.getItem("select") || "[]").reduce((acc, a) => acc + a.price, 0)} 코인 · 주문하기
-            </OrderButton>
+            <Link to="/cart">
+              <OrderButton>
+                {JSON.parse(localStorage.getItem("select") || "[]").reduce((acc, a) => acc + a.price, 0)} 코인 ·
+                주문하기
+              </OrderButton>
+            </Link>
           </OrderBackground>
         </OrderFooter>
       )}
