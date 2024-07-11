@@ -51,4 +51,7 @@ const StyleButton = styled.button<{
     opacity: 0.5;
     cursor: not-allowed;
   }
+  &:active {
+    opacity: 0.7;
+  }
 `;

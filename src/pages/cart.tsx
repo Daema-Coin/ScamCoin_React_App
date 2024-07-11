@@ -3,14 +3,31 @@ import styled from "styled-components";
 import { Arrow, Coin } from "@/assets/images";
 import { Link, useSearchParams } from "react-router-dom";
 import { useBoothMenu } from "@/apis/menu";
+import { useMyCoin } from "@/apis";
+import { useState } from "react";
+import { useOrder } from "@/apis/order";
 
 export const Cart = () => {
   const [searchParams] = useSearchParams();
   const { data: boothMenu } = useBoothMenu(+searchParams.get("id")!);
+  const { data: myCoin } = useMyCoin();
+  const [requestMessage, setRequestMessage] = useState("");
+  const [count, setCount] = useState(JSON.parse(localStorage.getItem("select") || "[]").length);
+  const { mutate } = useOrder();
 
   // JSON.parse(localStorage.getItem("select") || "[]").filter((res) => boothMenu.data.menu.);
-  const selectedBooth = boothMenu?.data.menu.filter(res =>
-    JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+  const selectedBooth = boothMenu?.data.menu
+    .filter(res => JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id))
+    .map(res => {
+      return {
+        ...res,
+        amount: JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+          .amount,
+      };
+    });
+
+  const [total, setTotal] = useState(
+    JSON.parse(localStorage.getItem("select") || "[]").reduce((acc: number, a: Storage) => acc + a.price * a.amount, 0)
   );
 
   return (
@@ -28,35 +45,65 @@ export const Cart = () => {
           <CoinWrapper>
             <img src={Coin} alt="coin" width={14} />
             <Text size={12} weight={600} color="#3D8AFF" style={{ marginBottom: "-2px" }}>
-              100
+              {myCoin?.data.coin}
             </Text>
           </CoinWrapper>
         </Stack>
       </Header>
       <Stack width="100vw" direction="column" align="center" padding={14} gap={14}>
         {selectedBooth?.map(res => {
-          const { id, name, image_url } = res;
-          return <SelectListItem key={id} name={name} coin={12} img={image_url} />;
+          const { id, name, image_url, price, amount } = res;
+          return (
+            <SelectListItem
+              key={id}
+              id={id}
+              name={name}
+              coin={price}
+              amount={amount}
+              img={image_url}
+              setCount={setCount}
+              setTotal={setTotal}
+            />
+          );
         })}
         <RequestWrapper>
           <Text size={14} weight={700}>
             요청사항
           </Text>
-          <Textarea maxLength={60} />
+          <Textarea maxLength={60} onChange={e => setRequestMessage(e.target.value)} value={requestMessage} />
         </RequestWrapper>
         <Stack width="100%" justify="space-between" margin="24px 0">
           <Text size={14} weight={600}>
             총 결제금액
           </Text>
           <Text size={14} weight={600}>
-            100코인
+            {total}
+            코인
           </Text>
         </Stack>
-        <Button width="100%" height={44} style={{ marginBottom: "20px" }}>
+        <Button
+          width="100%"
+          height={44}
+          style={{ marginBottom: "20px" }}
+          onClick={() => {
+            mutate({
+              orders: JSON.parse(localStorage.getItem("select") || "[]").map((res: Storage) => {
+                return { menu_id: res.id, amount: res.amount };
+              }),
+              booth_id: +searchParams.get("id")!,
+              request: requestMessage,
+              price: JSON.parse(localStorage.getItem("select") || "[]").reduce(
+                (acc: number, a: Storage) => acc + a.price,
+                0
+              ),
+            });
+          }}
+        >
           <Text size={14} weight={600} color="#fff">
-            100코인 결제하기
+            {total}
+            코인 결제하기
           </Text>
-          <NumCheck>1</NumCheck>
+          <NumCheck>{count}</NumCheck>
         </Button>
       </Stack>
     </Container>

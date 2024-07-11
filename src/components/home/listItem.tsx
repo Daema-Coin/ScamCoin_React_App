@@ -33,7 +33,7 @@ export const OrderListItem = ({ name, price, description, img, isOpen, id, setCo
             } else {
               localStorage.setItem(
                 "select",
-                JSON.stringify([...JSON.parse(localStorage.getItem("select") || "[]"), { id, price }])
+                JSON.stringify([...JSON.parse(localStorage.getItem("select") || "[]"), { id, price, amount: 1 }])
               );
             }
             setCount(JSON.parse(localStorage.getItem("select") || "[]").length);

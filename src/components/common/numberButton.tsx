@@ -1,24 +1,41 @@
 import { Minus, Plus } from "@/assets/images";
 import styled, { css } from "styled-components";
 import { Text } from "@/components";
+import { SetStateAction } from "react";
 
 type PropsType = {
+  id: number;
   value: number;
-  onChange: (value: number) => void;
+  setQuantity: React.Dispatch<SetStateAction<number>>;
+  setTotal: React.Dispatch<SetStateAction<number>>;
 };
 
-export const NumberButton = ({ value, onChange }: PropsType) => {
+export const NumberButton = ({ value, setQuantity, id, setTotal }: PropsType) => {
   return (
     <Container>
       <Img
         src={Minus}
         alt=""
         onClick={() => {
-          onChange(value <= 0 ? 0 : value - 1);
+          localStorage.setItem(
+            "select",
+            JSON.stringify(
+              JSON.parse(localStorage.getItem("select") || "[]").map((res: Storage) =>
+                res.id === id ? { ...res, amount: value <= 1 ? 1 : value - 1 } : res
+              )
+            )
+          );
+          setQuantity(value <= 1 ? 1 : value - 1);
+          setTotal(
+            JSON.parse(localStorage.getItem("select") || "[]").reduce(
+              (acc: number, a: Storage) => acc + a.price * a.amount,
+              0
+            )
+          );
         }}
         width={12}
         height={12}
-        $disabled={value <= 0}
+        $disabled={value <= 1}
       />
       <Text size={10} weight={900}>
         {value}
@@ -27,7 +44,21 @@ export const NumberButton = ({ value, onChange }: PropsType) => {
         src={Plus}
         alt=""
         onClick={() => {
-          onChange(value + 1);
+          localStorage.setItem(
+            "select",
+            JSON.stringify(
+              JSON.parse(localStorage.getItem("select") || "[]").map((res: Storage) =>
+                res.id === id ? { ...res, amount: value + 1 } : res
+              )
+            )
+          );
+          setQuantity(value + 1);
+          setTotal(
+            JSON.parse(localStorage.getItem("select") || "[]").reduce(
+              (acc: number, a: Storage) => acc + a.price * a.amount,
+              0
+            )
+          );
         }}
         width={12}
         height={12}

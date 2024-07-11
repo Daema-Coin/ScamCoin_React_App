@@ -1,4 +1,4 @@
-import { OrderListItem, SearchInput, Stack, Text } from "@/components";
+import { Button, OrderListItem, SearchInput, Stack, Text } from "@/components";
 import styled from "styled-components";
 import { useState } from "react";
 import { Cart, Coin, DSM, DSMLogo } from "@/assets/images";
@@ -12,6 +12,10 @@ export const Home = () => {
   const { data: myCoin } = useMyCoin();
   const [search, setSearch] = useState("");
   const [count, setCount] = useState(JSON.parse(localStorage.getItem("select") || "[]").length);
+
+  const selectedBooth = boothMenu?.data.menu.filter(res =>
+    JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+  );
 
   return (
     <Container>
@@ -64,13 +68,16 @@ export const Home = () => {
         <OrderFooter>
           <OrderBackground>
             <Link to={`/cart?id=${searchParams.get("id")}`}>
-              <OrderButton>
-                {JSON.parse(localStorage.getItem("select") || "[]").reduce(
-                  (acc: number, a: Storage) => acc + a.price,
-                  0
-                )}{" "}
-                코인 · 주문하기
-              </OrderButton>
+              <Button width="100%" height={44}>
+                <Text size={14} weight={600} color="#fff">
+                  {JSON.parse(localStorage.getItem("select") || "[]").reduce(
+                    (acc: number, a: Storage) => acc + a.price,
+                    0
+                  )}
+                  코인 · 주문하기
+                </Text>
+                <NumCheck>{selectedBooth?.length}</NumCheck>
+              </Button>
             </Link>
           </OrderBackground>
         </OrderFooter>
@@ -158,6 +165,7 @@ const ItemList = styled.div`
   gap: 12px;
   padding: 12px;
   overflow-y: auto;
+  padding-bottom: 100px;
 `;
 
 const OrderFooter = styled.footer`
@@ -180,33 +188,16 @@ const OrderBackground = styled.div`
   padding: 14px 13px;
 `;
 
-const OrderButton = styled.button`
-  width: 100%;
-  height: 45px;
-  background-color: #4285f4;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-  text-align: center;
-  font-weight: 500;
-  &:active {
-    opacity: 0.7;
-  }
+const NumCheck = styled.div`
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #3d8aff;
+  font-size: 10px;
+  font-weight: 900;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 6px;
 `;
-
-// .order-button:hover {
-//   background-color: #357ae8;
-// }
-
-// .up-down-enter-active,
-// .up-down-leave-active {
-//   transition: transform 0.3s ease, opacity 0.3s ease;
-// }
-
-// .up-down-enter,
-// .up-down-leave-to {
-//   transform: translateX(100%);
-//   opacity: 0;
-// }

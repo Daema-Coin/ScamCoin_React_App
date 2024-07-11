@@ -1,13 +1,20 @@
 import styled from "styled-components";
 import { Button, NumberButton, Stack } from "@/components";
+import { SetStateAction, useState } from "react";
 
 interface OrderListItemProps {
   name: string;
   coin: number;
   img: string;
+  amount: number;
+  id: number;
+  setCount: React.Dispatch<SetStateAction<number>>;
+  setTotal: React.Dispatch<SetStateAction<number>>;
 }
 
-export const SelectListItem = ({ name, coin, img }: OrderListItemProps) => {
+export const SelectListItem = ({ name, coin, img, amount, id, setCount, setTotal }: OrderListItemProps) => {
+  const [quantity, setQuantity] = useState(amount);
+
   return (
     <Item>
       <ImgWrapper>
@@ -17,10 +24,22 @@ export const SelectListItem = ({ name, coin, img }: OrderListItemProps) => {
         <ItemName>{name}</ItemName>
         <ItemPrice>{coin} 코인</ItemPrice>
         <Stack width="100%" justify="flex-end" gap={10}>
-          <Button width={50} height={24}>
+          <Button
+            width={50}
+            height={24}
+            onClick={() => {
+              localStorage.setItem(
+                "select",
+                JSON.stringify(
+                  JSON.parse(localStorage.getItem("select") || "[]").filter((res: Storage) => res.id !== id)
+                )
+              );
+              setCount(JSON.parse(localStorage.getItem("select") || "[]").length);
+            }}
+          >
             삭제
           </Button>
-          <NumberButton value={2} onChange={() => {}} />
+          <NumberButton id={id} value={quantity} setQuantity={setQuantity} setTotal={setTotal} />
         </Stack>
       </ItemDetail>
     </Item>
