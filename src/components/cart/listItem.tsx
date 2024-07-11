@@ -38,6 +38,21 @@ export const SelectListItem = ({ name, coin, img, amount, id, setCount, setTotal
                   JSON.parse(localStorage.getItem("select") || "[]").filter((res: Storage) => res.id !== id)
                 )
               );
+              setTotal(
+                boothMenu?.data.menu
+                  .filter((res: Storage) =>
+                    JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+                  )
+                  .map((res: Storage) => {
+                    return {
+                      ...res,
+                      amount: JSON.parse(localStorage.getItem("select") || "[]").find(
+                        (select: Storage) => res.id === select.id
+                      ).amount,
+                    };
+                  })
+                  .reduce((acc: number, a: Storage) => acc + a.price * a.amount, 0)
+              );
               setCount(
                 boothMenu?.data.menu.filter((res: Storage) =>
                   JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)

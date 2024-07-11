@@ -47,11 +47,12 @@ const StyleButton = styled.button<{
 
   cursor: pointer;
 
+  &:active {
+    opacity: 0.7;
+  }
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-  &:active {
-    opacity: 0.7;
   }
 `;

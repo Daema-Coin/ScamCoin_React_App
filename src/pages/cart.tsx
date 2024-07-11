@@ -121,7 +121,9 @@ export const Cart = () => {
           width="100%"
           height={44}
           style={{ marginBottom: "20px" }}
+          disabled={total <= 0}
           onClick={() => {
+            if (total <= 0) return;
             mutate({
               orders: JSON.parse(localStorage.getItem("select") || "[]").map((res: Storage) => {
                 return { menu_id: res.id, amount: res.amount };
