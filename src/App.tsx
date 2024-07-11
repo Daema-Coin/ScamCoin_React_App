@@ -1,5 +1,7 @@
+import { SignIn } from "@/pages";
+
 function App() {
-  return <></>;
+  return <SignIn />;
 }
 
 export default App;
