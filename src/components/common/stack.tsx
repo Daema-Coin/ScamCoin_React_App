@@ -36,7 +36,7 @@ export const Stack = forwardRef(
       justify = "flex-start",
       position = "static",
       overflow = "visible",
-      width = "100%",
+      width = "auto",
       height,
       gap = 0,
       margin = 0,

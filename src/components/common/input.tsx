@@ -1,35 +1,15 @@
 import { forwardRef, type ForwardedRef, type InputHTMLAttributes, type CSSProperties } from "react";
 import { styled } from "styled-components";
-import { Text } from "@/components";
 
 type PropsType = {
-  isPrice?: boolean;
   width?: CSSProperties["width"];
-  maxLength?: number;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export const Input = forwardRef(
-  (
-    { isPrice = false, maxLength, width = "100%", onChange, ...props }: PropsType,
-    ref: ForwardedRef<HTMLInputElement>
-  ) => {
+  ({ width = "100%", onChange, ...props }: PropsType, ref: ForwardedRef<HTMLInputElement>) => {
     return (
       <StyledInputWrapper $width={width}>
-        <StyledInput ref={ref} $isPrice={isPrice} onChange={onChange} type={isPrice ? "number" : "text"} {...props} />
-        {isPrice ? (
-          <Text size={14} weight={500} color="#CACACA" className="coin">
-            코인
-          </Text>
-        ) : (
-          maxLength && (
-            <Text
-              size={10}
-              weight={500}
-              color="#CACACA"
-              lineHeight={16}
-            >{`${props.value?.toString().length}/${maxLength}`}</Text>
-          )
-        )}
+        <StyledInput ref={ref} onChange={onChange} {...props} />
       </StyledInputWrapper>
     );
   }
@@ -43,24 +23,20 @@ const StyledInputWrapper = styled.label<{ $width?: CSSProperties["width"] }>`
   align-items: flex-end;
   width: ${({ $width }) => (typeof $width === "number" ? `${$width}px` : $width)};
   cursor: text;
-
-  .coin {
-    position: absolute;
-    right: 16px;
-  }
 `;
 
-const StyledInput = styled.input<{ $isPrice: boolean }>`
+const StyledInput = styled.input`
   width: 100%;
-  height: 40px;
-  padding: ${({ $isPrice }) => ($isPrice ? "10px 48px 10px 16px" : "10px 16px")};
-  border: 1px solid #cacaca;
+  height: 48px;
+  padding: 10px 16px;
+  border: none;
   border-radius: 8px;
 
   outline: none;
 
-  font-size: 12;
+  font-size: 14px;
   font-weight: 500;
+  background-color: #f7f7f7;
 
   ::placeholder {
     color: #cacaca;

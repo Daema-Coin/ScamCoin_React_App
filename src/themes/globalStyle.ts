@@ -69,13 +69,6 @@ textarea {
     resize: vertical;
 }
 
-body {
-    color: black;
-    font-family: Pretendard;
-    font-weight: 300;
-    line-height: 1.2
-}
-
 .normal		{ font-weight: 400 }
 
 .bold		{ font-weight: 700 }
