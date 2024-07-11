@@ -1,5 +1,6 @@
 import { Minus, Plus } from "@/assets/images";
 import styled, { css } from "styled-components";
+import { Text } from "@/components";
 
 type PropsType = {
   value: number;
@@ -15,31 +16,28 @@ export const NumberButton = ({ value, onChange }: PropsType) => {
         onClick={() => {
           onChange(value <= 0 ? 0 : value - 1);
         }}
-        width={16}
-        height={16}
+        width={12}
+        height={12}
         $disabled={value <= 0}
       />
-      <Input
-        value={value}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          onChange(+e.target.value.replace(/[^0-9]/g, " "));
-        }}
-      />
+      <Text size={10} weight={900}>
+        {value}
+      </Text>
       <Img
         src={Plus}
         alt=""
         onClick={() => {
           onChange(value + 1);
         }}
-        width={16}
-        height={16}
+        width={12}
+        height={12}
       />
     </Container>
   );
 };
 
 const Container = styled.div`
-  height: 36px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -56,10 +54,4 @@ const Img = styled.img<{ $disabled?: boolean }>`
       opacity: 0.2;
     `}
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
-`;
-
-const Input = styled.input`
-  border: none;
-  width: 30px;
-  text-align: center;
 `;

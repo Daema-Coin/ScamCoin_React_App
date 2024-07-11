@@ -66,7 +66,7 @@ table {
 }
 
 textarea {
-    resize: vertical;
+    resize: none;
 }
 
 .normal		{ font-weight: 400 }

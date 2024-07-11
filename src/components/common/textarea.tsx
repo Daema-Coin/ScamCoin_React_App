@@ -31,6 +31,7 @@ const StyledTextAreaWrapper = styled.label<{ $width?: CSSProperties["width"] }>`
   align-items: flex-end;
   width: ${({ $width }) => (typeof $width === "number" ? `${$width}px` : $width)};
   cursor: text;
+  gap: 2px;
 
   .coin {
     position: absolute;

@@ -72,7 +72,7 @@ const StyledStack = styled.div<StylePropsType>`
   flex-direction: ${({ $direction }) => $direction};
   justify-content: ${({ $justify }) => $justify};
   align-items: ${({ $align }) => $align};
-  width: auto;
+  width: ${({ $width }) => (typeof $width === "number" ? `${$width}px` : $width)};
   ${({ $height }) =>
     $height &&
     css`

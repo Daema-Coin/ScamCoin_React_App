@@ -3,27 +3,15 @@ import { css, styled, type CSSProperties } from "styled-components";
 
 type PropsType = {
   size?: CSSProperties["fontSize"];
-  variant?: "gray" | "primary";
   width?: CSSProperties["width"];
   height?: CSSProperties["height"];
   icon?: ReactNode;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = forwardRef(
-  (
-    { size = 12, variant = "primary", children, width, height = 26, ...props }: PropsType,
-    ref: ForwardedRef<HTMLButtonElement>
-  ) => {
+  ({ size = 12, children, width, height = 26, ...props }: PropsType, ref: ForwardedRef<HTMLButtonElement>) => {
     return (
-      <StyleButton
-        ref={ref}
-        $size={size}
-        $width={width}
-        $height={height}
-        $children={children}
-        $variant={variant}
-        {...props}
-      >
+      <StyleButton ref={ref} $size={size} $width={width} $height={height} $children={children} {...props}>
         {children}
       </StyleButton>
     );
@@ -52,10 +40,10 @@ const StyleButton = styled.button<{
         `}
   height: ${({ $height }) => $height}px;
 
-  border: none;
-  border-radius: 8px;
-  color: #ffffff;
-  background-color: ${({ $children }) => ($children === "취소" || $children === "감소" ? "#C8C8C8" : "#3D8AFF")};
+  border: ${({ $children }) => ($children === "삭제" ? "1px solid #ccc" : "none")};
+  border-radius: ${({ $children }) => ($children === "삭제" ? 4 : 8)}px;
+  color: ${({ $children }) => ($children === "삭제" ? "#000" : "#fff")};
+  background-color: ${({ $children }) => ($children === "삭제" ? "#fff" : "#3D8AFF")};
 
   cursor: pointer;
 
