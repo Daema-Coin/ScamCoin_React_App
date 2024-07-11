@@ -1,9 +1,5 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { instance, type SignInRequest } from "@/apis";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Cookies } from "react-cookie";
+import { useQuery } from "@tanstack/react-query";
+import { instance } from "@/apis";
 import { BoothMenuResponse } from "./type";
 
 const router = "/menu";

@@ -64,8 +64,11 @@ export const Home = () => {
           <OrderBackground>
             <Link to="/cart">
               <OrderButton>
-                {JSON.parse(localStorage.getItem("select") || "[]").reduce((acc, a) => acc + a.price, 0)} 코인 ·
-                주문하기
+                {JSON.parse(localStorage.getItem("select") || "[]").reduce(
+                  (acc: number, a: Storage) => acc + a.price,
+                  0
+                )}{" "}
+                코인 · 주문하기
               </OrderButton>
             </Link>
           </OrderBackground>

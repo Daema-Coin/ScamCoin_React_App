@@ -13,8 +13,8 @@ interface OrderListItemProps {
 }
 
 export const OrderListItem = ({ name, price, description, img, isOpen, id, setCount }: OrderListItemProps) => {
-  const [isSelected, setIsSelected] = useState(
-    JSON.parse(localStorage.getItem("select") || "[]").some(res => res.id === id)
+  const [isSelected, setIsSelected] = useState<boolean>(
+    JSON.parse(localStorage.getItem("select") || "[]").some((res: Storage) => res.id === id)
   );
 
   return (
@@ -26,7 +26,9 @@ export const OrderListItem = ({ name, price, description, img, isOpen, id, setCo
             if (isSelected) {
               localStorage.setItem(
                 "select",
-                JSON.stringify(JSON.parse(localStorage.getItem("select") || "[]").filter(res => res.id !== id))
+                JSON.stringify(
+                  JSON.parse(localStorage.getItem("select") || "[]").filter((res: Storage) => res.id !== id)
+                )
               );
             } else {
               localStorage.setItem(
