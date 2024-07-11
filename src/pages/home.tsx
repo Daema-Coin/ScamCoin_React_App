@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Cart, Coin, DSM, DSMLogo } from "@/assets/images";
 import { useBoothMenu } from "@/apis/menu";
 import { useMyCoin } from "@/apis";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 export const Home = () => {
-  const { data: boothMenu } = useBoothMenu(4);
+  const [searchParams] = useSearchParams();
+  const { data: boothMenu } = useBoothMenu(+searchParams.get("id")!);
   const { data: myCoin } = useMyCoin();
   const [search, setSearch] = useState("");
   const [count, setCount] = useState(JSON.parse(localStorage.getItem("select") || "[]").length);
@@ -62,7 +63,7 @@ export const Home = () => {
       {count > 0 && (
         <OrderFooter>
           <OrderBackground>
-            <Link to="/cart">
+            <Link to={`/cart?id=${searchParams.get("id")}`}>
               <OrderButton>
                 {JSON.parse(localStorage.getItem("select") || "[]").reduce(
                   (acc: number, a: Storage) => acc + a.price,

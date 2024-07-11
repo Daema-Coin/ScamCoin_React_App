@@ -1,17 +1,30 @@
 import { Button, SelectListItem, Stack, Text, Textarea } from "@/components";
 import styled from "styled-components";
 import { Arrow, Coin } from "@/assets/images";
+import { Link, useSearchParams } from "react-router-dom";
+import { useBoothMenu } from "@/apis/menu";
+import { useEffect } from "react";
 
 export const Cart = () => {
+  const [searchParams] = useSearchParams();
+  const { data: boothMenu } = useBoothMenu(+searchParams.get("id")!);
+
+  // JSON.parse(localStorage.getItem("select") || "[]").filter((res) => boothMenu.data.menu.);
+  const selectedBooth = boothMenu?.data.menu.filter(res =>
+    JSON.parse(localStorage.getItem("select") || "[]").find((select: Storage) => res.id === select.id)
+  );
+
   return (
     <Container>
       <Header>
-        <Stack align="center" gap={10}>
-          <img src={Arrow} alt="logo" />
-          <Text size={14} weight={700} style={{ marginBottom: "-2px" }}>
-            주문하기
-          </Text>
-        </Stack>
+        <Link to={`/?id=${searchParams.get("id")}`}>
+          <Stack align="center" gap={10}>
+            <img src={Arrow} alt="logo" />
+            <Text size={14} weight={700} style={{ marginBottom: "-2px" }}>
+              주문하기
+            </Text>
+          </Stack>
+        </Link>
         <Stack gap={20} align="center">
           <CoinWrapper>
             <img src={Coin} alt="coin" width={14} />
@@ -22,9 +35,10 @@ export const Cart = () => {
         </Stack>
       </Header>
       <Stack width="100vw" direction="column" align="center" padding={14} gap={14}>
-        <SelectListItem name="코인 1개" coin={12} img="12" />
-        <SelectListItem name="코인 1개" coin={12} img="12" />
-        <SelectListItem name="코인 1개" coin={12} img="12" />
+        {selectedBooth?.map(res => {
+          const { id, name, image_url } = res;
+          return <SelectListItem key={id} name={name} coin={12} img={image_url} />;
+        })}
         <RequestWrapper>
           <Text size={14} weight={700}>
             요청사항
