@@ -10,3 +10,4 @@ export { default as Arrow } from "./arrow.svg";
 export { default as DSM } from "./dsm.png";
 export { default as DSMLogo } from "./dsmLogo.png";
 export { default as Pay } from "./pay.png";
+export { default as SOLDOUT } from "./soldout.png";

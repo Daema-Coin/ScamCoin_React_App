@@ -2,9 +2,14 @@ import { OrderListItem, SearchInput, Stack, Text } from "@/components";
 import styled from "styled-components";
 import { useState } from "react";
 import { Cart, Coin, DSM, DSMLogo } from "@/assets/images";
+import { useBoothMenu } from "@/apis/menu";
+import { useMyCoin } from "@/apis";
 
 export const Home = () => {
-  const [selected, setSelected] = useState([]);
+  const { data: boothMenu } = useBoothMenu(4);
+  const { data: myCoin } = useMyCoin();
+  const [search, setSearch] = useState("");
+  const [count, setCount] = useState(JSON.parse(localStorage.getItem("select") || "[]").length);
 
   return (
     <Container>
@@ -14,7 +19,7 @@ export const Home = () => {
           <CoinWrapper>
             <img src={Coin} alt="coin" width={14} />
             <Text size={12} weight={600} color="#3D8AFF" style={{ marginBottom: "-2px" }}>
-              100
+              {myCoin?.data.coin}
             </Text>
           </CoinWrapper>
           <CartImage src={Cart} alt="cart" />
@@ -24,24 +29,39 @@ export const Home = () => {
         <FixedContent>
           <BoothInfo>
             <BoothIcon src={DSM} alt="dsm" />
-            <BoothName>부스이름</BoothName>
+            <BoothName>{boothMenu?.data.booth_name}</BoothName>
           </BoothInfo>
           <SearchBar>
-            <SearchInput type="text" placeholder="검색어를 입력해주세요." />
+            <SearchInput onChange={e => setSearch(e.target.value)} type="text" placeholder="검색어를 입력해주세요." />
           </SearchBar>
         </FixedContent>
         <Divider />
         <ItemList>
-          <OrderListItem name="동전 1개" coin={10} description="설명" img=".png" />
-          <OrderListItem name="fdafds" coin={10} description="설명" img=".png" />
-          <OrderListItem name="fdafds" coin={10} description="설명" img=".png" />
-          <OrderListItem name="fdafds" coin={10} description="설명" img=".png" />
+          {boothMenu?.data.menu
+            .filter(res => res.name.includes(search))
+            .map(res => {
+              const { id, name, description, price, image_url, is_open } = res;
+              return (
+                <OrderListItem
+                  key={id}
+                  id={id}
+                  name={name}
+                  price={price}
+                  description={description}
+                  img={image_url}
+                  isOpen={is_open}
+                  setCount={setCount}
+                />
+              );
+            })}
         </ItemList>
       </main>
-      {selected.length > 0 && (
+      {count > 0 && (
         <OrderFooter>
           <OrderBackground>
-            <OrderButton>100코인 · 주문하기</OrderButton>
+            <OrderButton>
+              {JSON.parse(localStorage.getItem("select") || "[]").reduce((acc, a) => acc + a.price, 0)} 코인 · 주문하기
+            </OrderButton>
           </OrderBackground>
         </OrderFooter>
       )}

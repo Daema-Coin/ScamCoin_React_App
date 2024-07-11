@@ -1,38 +1,80 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import styled from "styled-components";
+import { SOLDOUT } from "@/assets/images";
 
 interface OrderListItemProps {
   name: string;
-  coin: number;
+  price: number;
   description: string;
   img: string;
+  id: number;
+  isOpen: boolean;
+  setCount: React.Dispatch<SetStateAction<number>>;
 }
 
-export const OrderListItem = ({ name, coin, description, img }: OrderListItemProps) => {
-  const [isSelected, setIsSelected] = useState(false);
+export const OrderListItem = ({ name, price, description, img, isOpen, id, setCount }: OrderListItemProps) => {
+  const [isSelected, setIsSelected] = useState(
+    JSON.parse(localStorage.getItem("select") || "[]").some(res => res.id === id)
+  );
 
   return (
-    <Item $isSelected={isSelected} onClick={() => setIsSelected(prev => !prev)}>
-      <ItemDetail>
-        <ItemName>{name}</ItemName>
-        <ItemPrice>{coin} 코인</ItemPrice>
-        <ItemDescription>{description}</ItemDescription>
-      </ItemDetail>
-      <ImgWrapper>
-        <img src={import.meta.env.VITE_FILE_URL + img} alt="" width={80} height={80} />
-      </ImgWrapper>
-    </Item>
+    <>
+      {isOpen ? (
+        <Item
+          isSelected={isSelected}
+          onClick={() => {
+            if (isSelected) {
+              localStorage.setItem(
+                "select",
+                JSON.stringify(JSON.parse(localStorage.getItem("select") || "[]").filter(res => res.id !== id))
+              );
+            } else {
+              localStorage.setItem(
+                "select",
+                JSON.stringify([...JSON.parse(localStorage.getItem("select") || "[]"), { id, price }])
+              );
+            }
+            setCount(JSON.parse(localStorage.getItem("select") || "[]").length);
+            setIsSelected(prev => !prev);
+          }}
+        >
+          <ItemDetail>
+            <ItemName>{name}</ItemName>
+            <ItemPrice>{price} 코인</ItemPrice>
+            <ItemDescription>{description}</ItemDescription>
+          </ItemDetail>
+          <div className="item-image">
+            <ItemImage src={import.meta.env.VITE_FILE_URL + img} alt="" />
+          </div>
+        </Item>
+      ) : (
+        <Item style={{ opacity: 0.2 }}>
+          <ItemDetail>
+            <ItemName>{name}</ItemName>
+            <ItemPrice>{price} 코인</ItemPrice>
+            <ItemDescription>{description}</ItemDescription>
+          </ItemDetail>
+          <div className="item-image">
+            <ItemImage src={SOLDOUT} alt="" />
+          </div>
+          <div className="item-image">
+            <ItemImage src={import.meta.env.VITE_FILE_URL + img} alt="" />
+          </div>
+        </Item>
+      )}
+    </>
   );
 };
 
-const Item = styled.div<{ $isSelected: boolean }>`
+const Item = styled.div<{ isSelected: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #fff;
-  padding: 20px;
+  padding: 15px;
   border-radius: 8px;
-  border: ${({ $isSelected }) => ($isSelected ? "2px solid #4285f4" : "1px solid #cccccc")};
+  border: ${props => (props.isSelected ? "2px solid #4285f4" : "1px solid #cccccc")};
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: border-color 0.3s;
 `;
@@ -44,27 +86,22 @@ const ItemDetail = styled.div`
 `;
 
 const ItemName = styled.div`
-  font-size: 16px;
-  font-weight: 800;
-  margin-bottom: 6px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 2px;
 `;
 
 const ItemPrice = styled.div`
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 12px;
+  font-size: 14px;
+  margin-bottom: 5px;
 `;
 
 const ItemDescription = styled.div`
   font-size: 10px;
-  font-weight: 600;
-  color: #787878;
 `;
 
-const ImgWrapper = styled.div`
+const ItemImage = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 8px;
-  overflow: hidden;
-  background-color: #cacaca;
 `;
